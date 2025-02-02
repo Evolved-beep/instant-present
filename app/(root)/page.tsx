@@ -1,11 +1,20 @@
 import React from 'react'
+import ProductList from '@/components/shared/product/product-list'
+import {getLatestProducts} from "@/lib/actions/product.actions"
 
 export const metadata = {
   title:'Home',
 }
-const Homepage = () => {
+
+const Homepage = async() => {
+  const latestProducts = await getLatestProducts()
   return (
-    <>Instant-Présent</>
+    <>
+      <ProductList 
+        data={latestProducts} 
+        title='Newest arrivals' 
+        limit={4}/>
+    </>
   )
 }
 
