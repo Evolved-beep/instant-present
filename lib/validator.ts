@@ -20,3 +20,27 @@ export const insertProductSchema = z.object({
     banner: z.string().nullable(),
     price: currency,
 })
+
+export const cartItemSchema = z.object({
+    productId: z.string().min(1,'Le produit est requis'),
+    name: z.string().min(1,'Le nom est requis'),
+    slug: z.string().min(1,'Slug est requis'),
+    qty: z.number().int().nonnegative('La quantité doit être positive'),
+    image: z.string().min(1,'Une photo est requise'),
+    price:currency,
+})
+
+export const signInFormSchema = z.object({
+    email: z.string().email('Invalid email adress'),
+    password: z.string().min(6, 'Votre mot de passe doit contenir au minimum 6 caractères')
+})
+
+export const signUpFormSchema = z.object({
+    name: z.string().min(3,"Votre nom doit contenir au minimum 3 caractères"),
+    email: z.string().email('Invalid email adress'),
+    password: z.string().min(6, 'Votre mot de passe doit contenir au minimum 6 caractères'),
+    confirmPassword: z.string().min(6, "Veuillez entrer le même mot de passe")
+}).refine((data) => data.password === data.confirmPassword, {
+    message: "Les mots de passes ne sont pas identiques",
+    path:['confirmPassword']
+})
