@@ -4,7 +4,8 @@ import {prisma} from './db/prisma'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { compareSync } from "bcrypt-ts-edge"
 import type { NextAuthConfig } from "next-auth"
-
+import { cookies } from "next/headers"
+import { NextResponse } from "next/server"
 export const config = {
 
     pages:{
@@ -69,8 +70,61 @@ export const config = {
                         data:{name: token.name}
                     })
                 }
+                if(['signIn', 'signUp'].includes(trigger)){
+                    const cookieObject = await cookies()
+                    const sessionCartId = cookieObject.get('sessionCartId')?.value
+
+                    if(!sessionCartId) return;
+
+                    const sessionCart = await prisma.cart.findFirst({
+                        where:{sessionCartId},
+                    })
+                    if(!sessionCart) return;
+
+                    if(sessionCart.userId !== user.id){
+                        await prisma.cart.deleteMany({
+                            where:{userId: user.id}
+                        })
+
+                        await prisma.cart.update({
+                            where:{id:sessionCart.id},
+                            data:{userId: user.id}
+                        })
+                    }
+                }
             }
             return token;
+        },
+        authorized({request, auth}: any){
+            const protectedPaths = [
+                /\/shipping-address/,
+                /\/payment-method/,
+                /\/place-order/,
+                /\/profile/,
+                /\/user\/(.*)/,
+                /\/order\/(.*)/,
+                /\/admin/,
+              ];
+
+            const { pathname } = request.nextUrl
+
+            if(!auth && protectedPaths.some((p) => p.test(pathname))) return false 
+
+
+            if(!request.cookies.get('sessionCartId')){
+                const sessionCartId = crypto.randomUUID()
+
+                const newRequestHeaders = new Headers(request.headers);
+                const response = NextResponse.next({
+                    request: {
+                        headers: newRequestHeaders
+                    }
+                })
+                response.cookies.set('sessionCartId', sessionCartId)
+                return response
+            } else {
+                return true
+            }
         }
     }
 } satisfies NextAuthConfig;

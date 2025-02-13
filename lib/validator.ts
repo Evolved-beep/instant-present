@@ -21,15 +21,6 @@ export const insertProductSchema = z.object({
     price: currency,
 })
 
-export const cartItemSchema = z.object({
-    productId: z.string().min(1,'Le produit est requis'),
-    name: z.string().min(1,'Le nom est requis'),
-    slug: z.string().min(1,'Slug est requis'),
-    qty: z.number().int().nonnegative('La quantité doit être positive'),
-    image: z.string().min(1,'Une photo est requise'),
-    price:currency,
-})
-
 export const signInFormSchema = z.object({
     email: z.string().email('Invalid email adress'),
     password: z.string().min(6, 'Votre mot de passe doit contenir au minimum 6 caractères')
@@ -43,4 +34,33 @@ export const signUpFormSchema = z.object({
 }).refine((data) => data.password === data.confirmPassword, {
     message: "Les mots de passes ne sont pas identiques",
     path:['confirmPassword']
+})
+
+export const cartItemSchema = z.object({
+    productId: z.string().min(1, "Un produit doit être ajouter"),
+    name: z.string().min(1, "Un nom doit être ajouter"),
+    slug: z.string().min(1, "Test"),
+    qty: z.number().int().nonnegative("La quantité ne peut pas être négative"),
+    image: z.string().min(1, "Une image doit être ajouter"),
+    price: currency
+})
+
+export const insertCartSchema = z.object({
+    items: z.array(cartItemSchema),
+    itemsPrice: currency,
+    totalPrice: currency,
+    shippingPrice: currency,
+    sessionCartId: z.string().min(1,"Session Cart Id is required"),
+    userId: z.string().optional().nullable()
+
+})
+
+export const shippingAddressSchema = z.object({
+    fullName: z.string().min(3, "Votre nom doit comporter au minimum 3 caractères"),
+    streetAdress: z.string().min(3, "Votre adresse doit comporter au minimum 3 caractères"),
+    city: z.string().min(3, "Votre ville doit comporter au minimum 3 caractères"),
+    postalCode: z.string().min(3, "Votre code postal doit comporter au minimum 3 caractères"),
+    Pays: z.string().min(3, "Votre pays doit comporter au minimum 3 caractères"),
+    lat: z.number().optional(),
+    lng: z.number().optional(),
 })

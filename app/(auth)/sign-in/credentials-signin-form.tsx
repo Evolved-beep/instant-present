@@ -28,6 +28,8 @@ const CredentialsSignForm = () => {
         </Button>
     )
   }
+  console.log(signInDefaultValues)
+  console.log(data)
   return (
     <form action={action}>
         <input type="hidden" name='callbackUrl' value={callbackUrl} />
