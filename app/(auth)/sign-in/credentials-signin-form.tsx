@@ -13,7 +13,7 @@ import { useSearchParams } from 'next/navigation'
 const CredentialsSignForm = () => {
   const [data,action] = useActionState(signInWithCredentials,{
     success:false,
-    message:''
+    message:'',
   })  
 
   const searchParams = useSearchParams();
