@@ -4,7 +4,7 @@ import { getMyCart } from '@/lib/actions/cart.actions'
 import { getUserById } from '@/lib/actions/user.actions'
 import { redirect } from 'next/navigation'
 import { auth } from '@/auth'
-import { ShippingAdress } from '@/types'
+import { ShippingAddress } from '@/types'
 import CheckoutSteps from '@/components/shared/checkout-steps'
 import { Card, CardContent } from '@/components/ui/card'
 import Link from 'next/link'
@@ -30,7 +30,7 @@ const PlaceOrderPage = async() => {
     if(!cart || cart.items.length === 0) redirect('/cart')
     if(!user.address) redirect('/shipping-address')
     if(!user.paymentMethod) redirect('payment-method')
-    const userAddress = user.address as ShippingAdress
+    const userAddress = user.address as ShippingAddress
   return (
     <>
         <CheckoutSteps current={3} />

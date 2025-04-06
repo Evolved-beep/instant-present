@@ -19,7 +19,7 @@ const CartTable = ({cart}: {cart?: Cart}) => {
   const router = useRouter()
   const {toast} = useToast()
   const [isPending, startTransition] = useTransition()
-  console.log(typeof(cart?.itemsPrice));
+  console.log("cart",cart);
   return (
     <>
         <h1 className='py-4 h2-bold'>Panier</h1>

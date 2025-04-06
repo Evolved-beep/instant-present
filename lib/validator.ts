@@ -16,16 +16,20 @@ export const insertProductSchema = z.object({
     brand: z.string().min(3, "La marque doit comporter au minimum 3 caractères"),
     description: z.string().min(3,"Votre description doit comporter au minimum 3 caractères"),
     stock: z.coerce.number(),
-    images: z.array(z.string().min(1, "Vous devez au moins ajouter une image pour le produit concerné")),
-    isFeatured: z.boolean(),
-    banner: z.string().nullable(),
+    images: z.array(z.string()).min(1, 'Vous devez ajouter une image à votre produit'),
+    /* isFeatured: z.boolean(),
+    banner: z.string().nullable(), */
     price: currency,
 })
 
-export const signInFormSchema = z.object({
-    email: z.string().email('Invalid email adress'),
-    password: z.string().min(6, 'Votre mot de passe doit contenir au minimum 6 caractères')
+export const updateProductSchema = insertProductSchema.extend({
+    id: z.string().min(1, "L'ID est requis")
 })
+
+export const signInFormSchema = z.object({
+    email: z.string().email('Invalid email address'),
+    password: z.string().min(6, 'Password must be at least 6 characters'),
+  });
 
 export const signUpFormSchema = z.object({
     name: z.string().min(3,"Votre nom doit contenir au minimum 3 caractères"),
@@ -91,4 +95,9 @@ export const insertOrderItemSchema = z.object({
     name:z.string(),
     price: currency,
     qty: z.string(),
+})
+
+export const updateProfileSchema = z.object({
+    name: z.string().min(3, "Votre nom doit contenir au minimum 3 caractères"),
+    email: z.string().min(3, "Votre email doit contenir au minimum 3 caractères")
 })

@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { string } from "zod";
+import qs from 'query-string'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -60,6 +60,12 @@ export function formatCurrency(amount: number | string | null){
   }
 }
 
+// Format number
+const NUMBER_FORMATTER = new Intl.NumberFormat('fr'); 
+export function formatNumber(number:number){
+  return NUMBER_FORMATTER.format(number);
+}
+
 export function formatId(id:string){
   return `..${id.substring(id.length - 6)}`
 }
@@ -96,18 +102,37 @@ export const formatDateTime = (dateString: Date) => {
     'fr',
     timeOptions
   );
-
-  const testDate = new Date("2023-10-25T08:30:00Z")
-
-  const formatted = formatDateTime(testDate)
-
-  console.log('Full date time:', formatted.dateTime);
-  console.log("Date only:", formatted.dateOnly);
-  console.log("Time Only", formatted.timeOnly);
-
+  
   return {
     dateTime: formattedDateTime,
     dateOnly: formattedDate,
     timeOnly: formattedTime,
   };
 };
+
+// Form the pagination links
+
+export function formUrlQuery({
+  params,
+  key,
+  value,
+}: {
+  params: string;
+  key: string;
+  value: string | null;
+}) {
+  const query = qs.parse(params);
+
+  query[key] = value;
+
+  return qs.stringifyUrl(
+    {
+      url: window.location.pathname,
+      query,
+    },
+    {
+      skipNull: true,
+    }
+  );
+}
+
