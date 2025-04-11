@@ -38,7 +38,7 @@ const DeleteDialog = ({id, action}: {
         </AlertDialogTrigger>
         <AlertDialogContent>
             <AlertDialogHeader>
-                <AlertDialogTitle>Êtes-vous absolument sur de supprimer cette commande ?</AlertDialogTitle>
+                <AlertDialogTitle>Êtes-vous absolument sur de faire cette action ?</AlertDialogTitle>
                 <AlertDialogDescription>
                     Cette action est irréversible
                 </AlertDialogDescription>
